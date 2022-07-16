@@ -28,3 +28,15 @@ padding: 20px 50px;
 font-size: 150%;
 margin-top:50px;
 }
+
+.container {
+  margin: 0 auto;
+}
+
+.flex {
+  display: flex;
+}
+
+.product-box {
+  margin-top: 25%;
+}
