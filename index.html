@@ -1,12 +1,11 @@
-<!DOCTYPE html>
-<html>
+ <!DOCTYPE html>
+<html lang="ru">
 
 <head>
   <title>Vue.js Pet Depot</title>
   <script src="https://cdn.jsdelivr.net/npm/vue@2.7.0"></script>
   <link rel="stylesheet" type="text/css" href="assets/css/app.css" />
-  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-    crossorigin="anonymous"> -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
   <meta charset="UTF-8">
 </head>
 
@@ -14,7 +13,17 @@
   <div id="app">
     <div class="container">
       <header>
-        <h1>Добро пожаловать на {{sitename}}</h1>
+        <div class="header__top flex">
+          <div class="navbar navbar-default">
+            <h1>Добро пожаловать на {{sitename}}</h1>
+          </div>
+          <div class="nav navbar navbar-right cart">
+            <span class="glyphicon glyphicon-shopping-cart">
+              {{cartItemCount}} Checkout
+            </span>
+          </div>
+        </div>        
+        
       </header>
       <main>
         <div class="row product flex">
@@ -30,6 +39,10 @@
               <p class="price">
                 {{ product.price | formatPrice}}
               </p>
+              <button class="default" @click="addToCart" v-if="canAddToCart">                  
+                Add to cart
+              </button>
+              <button class="disabled" v-else>Add to cart</button>
             </div>            
           </div>
         </div>
@@ -49,8 +62,10 @@
           description: "A 25 pound bag of <em>irresistible</em>," +
             "organic goodness for your cat.",
           price: 2000,
-          image: "assets/images/product-fullsize.png"
-        }
+          image: "assets/images/product-fullsize.png",
+          availableInventory: 5
+        },
+        cart: []
       },
       beforeCreate: function () { //Жизненый цикл Vue
         if (APP_LOG_LIFECYCLE_EVENTS) {
@@ -109,6 +124,21 @@
           } else {
             return "$" + (price / 100).toFixed(2);	
           }
+        }
+      },
+      //Добавление в корзину по кнопке
+      methods: {
+        addToCart: function() {
+          this.cart.push( this.product.id);
+        }
+      },
+      //Подсчет количества покупок в корзине
+      computed: {
+        cartItemCount: function() {
+          return this.cart.length || '';
+        },
+        canAddToCart: function() {
+          return this.product.availableInventory > this.cartItemCount;
         }
       }
     });

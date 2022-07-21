@@ -1,9 +1,9 @@
-header h1{
+/* header h1{
   padding: 10px 20px;
-}
+} */
 
 body {
-  max-width: 970px;
+  max-width: 1440px;
 }
 .cart {
 padding: 20px 50px;
@@ -39,4 +39,37 @@ margin-top:50px;
 
 .product-box {
   margin-top: 25%;
+}
+
+.default {
+  min-width: 100px;
+  background-color: pink;
+  border: none;
+  border-radius: 5px;
+}
+
+.default:hover {
+  border: 1px solid;
+}
+
+.cart {
+  border: 0.5px solid #000;
+  border-radius: 5px;
+  padding: 5px;
+  min-width: 120px;
+  max-height: 50px;
+  
+  align-content: center;
+}
+
+.glyphicon-shopping-cart {
+  margin-left: auto;
+}
+
+.header__top {
+  background-color: pink;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  padding: 015px;
 }
