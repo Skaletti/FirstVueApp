@@ -16,7 +16,7 @@
     <div class="container">
       <header>
         <div class="header__top flex">
-          <div class="navbar navbar-default">
+          <div class="header__top-navbar navbar "> <!--navbar-default - в коде листинга есть этот класс Но он разрушает всю структуру-->
             <h1>Добро пожаловать на {{sitename}}</h1>
           </div>
           <div class="nav navbar navbar-right cart">
@@ -45,82 +45,102 @@
                 <p class="price">
                   {{ product.price | formatPrice}}
                 </p>
-                <button class="default" @click="addToCart" v-if="canAddToCart">
-                  Add to cart
+                <button class="btn btn-primary btn-lg"
+                  v-on:click="addToCart" 
+                  v-if="canAddToCart">Add to cart
                 </button>
-                <button class="disabled" v-else>Add to cart</button>
+                <button disabled="true" class="btn btn-primary btn-lg" 
+                  v-else>Add to cart
+                </button>
+                <span class="inventory-message" 
+                  v-if="product.availableInventory - cartItemCount === 0">All Out! 
+                </span>
+                <span class="inventory-message" 
+                  v-else-if="product.availableInventory - cartItemCount < 5"> 
+                  Only {{product.availableInventory - cartItemCount}} left!
+                </span>
+                <span class="inventory-message" 
+                  v-else>Buy Now! 
+                </span>
+                <div class="rating">
+                  <span v-for="n in 5">☆</span>
+                </div>
               </div>
+
             </div>
           </div>
           <div v-else>
-            <div class="col-md-6">
-              <strong>First Name:</strong>
-              <input v-model="order.firstName" class="form-control">
-            </div>
-            <div class="col-md-6">
-              <strong>Last Name:</strong>
-              <input v-model="order.lastName" class="form-control">
-            </div>
-            <!-- <div class="col-md-12 verify">
-              <pre>
-                First Name: {{order.firstName}}
-                Last Name: {{order.lastName}}
-              </pre>
-            </div> -->
-            <div class="form-group">
-              <div class="col-md-12"><strong>Address:</strong></div>
-              <div class="col-md-12">
-                <input v-model="order.address" class="form-control">
-              </div>
-            </div>
-            <div class="form-group">
-              <div class="col-md-12"><strong>City:</strong></div>
-              <div class="col-md-12">
-                <input v-model="order.city" class="form-control">
-              </div>
-            </div>
-            <div class="form-group">
-              <div class="col-md-2">
-                <strong>State:</strong>
-                <select v-model="order.state" class="form-control">
-                  <option disabled value="">State</option>
-                  <option>AL</option>
-                  <option>AR</option>
-                  <option>CA</option>
-                  <option>NV</option>
-                </select>
-              </div>
-            </div>
-            <div class="form-group">
-              <div class="col-md-6 col-md-offset-4">
-                <strong>Zip / Postal Code:</strong>
-                <input v-model="order.zip" class="form-control" />
-              </div>
-            </div>
 
-            <div class="form-group">
-              <div class="col-md-6 boxes">
-                <input type="checkbox" id="gift" value="true" v-model="order.gift">
-                <label for="gift">Ship As Gift?</label>
-              </div>
-            </div>
-            <div class="form-group">
-              <div class="col-md-6 boxes">
-                <input type="radio" id="home" value="Home" v-model="order.method">
-                <label for="home">Home</label>
-                <input type="radio" id="business" value="Business" v-model="order.method">
-                <label for="business">Business</label>
-              </div>
-            </div>
+            <div class="col-md-10 col-md-offset-1">
+              <div class="panel panel-info">
+                <div class="panel-heading">Pet Depot Checkout</div>
+                <div class="panel-body">
+                  <div class="form-group">
+                    <div class="col-md-12">
+                      <h4><strong>Enter Your Information</strong></h4>
+                    </div>
+                    <div class="col-md-6">
+                      <strong>First Name:</strong>
+                      <input v-model.trim.lazy="order.firstName" class="form-control">
+                    </div>
+                    <div class="col-md-6">
+                      <strong>Last Name:</strong>
+                      <input v-model.trim.lazy="order.lastName" class="form-control">
+                    </div>
+                    <div class="form-group">
+                      <div class="col-md-12"><strong>Address:</strong></div>
+                      <div class="col-md-12">
+                        <input v-model.trim.lazy="order.address" class="form-control">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="col-md-12"><strong>City:</strong></div>
+                      <div class="col-md-12">
+                        <input v-model.trim.lazy="order.city" class="form-control">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="col-md-2">
+                        <strong>State:</strong>
+                        <select v-model="order.state" class="form-control">
+                          <option disabled value="">State</option>
+                          <option v-for="(state, key) in states" v-bind:value="state">{{key}}</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="col-md-6 col-md-offset-4">
+                        <strong>Zip / Postal Code:</strong>
+                        <input v-model.number="order.zip" class="form-control" type="number">
+                      </div>
+                    </div>
 
-            <div class="form-group">
-              <div class="col-md-6">
-                <button type="submit" class="btn btn-primary submit" v-on:click="submitForm">Place Order</button>
-              </div>
-            </div>
+                    <div class="form-group">
+                      <div class="col-md-6 boxes">
+                        <input type="checkbox" id="gift" value="true" v-bind:true-value="order.sendGift"
+                          v-bind:false-value="order.dontSendGift" v-model="order.gift">
+                        <label for="gift">Ship As Gift?</label>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="col-md-6 boxes">
+                        <input type="radio" id="home" value="Home" v-bind:value="order.home" v-model="order.method">
+                        <label for="home">Home</label>
+                        <input type="radio" id="business" value="Business" v-bind:value="order.business"
+                          v-model="order.method">
+                        <label for="business">Business</label>
+                      </div>
+                    </div>
 
-            <div class="col-md-12 verify">
-              <pre>
+                    <div class="form-group">
+                      <div class="col-md-6">
+                        <button type="submit" class="btn btn-primary submit" v-on:click="submitForm">Place
+                          Order</button>
+                      </div>
+                    </div>
+
+                    <div class="col-md-12 verify">
+                      <pre>
               First Name: {{order.firstName}}
                Last Name: {{order.lastName}}
                  Address: {{order.address}}
@@ -129,7 +149,11 @@
                    State: {{order.state}}
                   Method: {{order.method}}
                     Gift: {{order.gift}}
-              </pre>
+                      </pre>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -144,6 +168,12 @@
       data: {
         sitename: 'Vue.js Pet Depot',
         showProduct: true,
+        states: {
+          AL: 'Alabama',
+          RA: 'Arizona',
+          CA: 'California',
+          NV: 'Nevada'
+        },
         order: {
           firstName: '',
           lastName: '',
@@ -151,8 +181,12 @@
           city: '',
           zip: '',
           state: '',
-          method: 'Home',
-          gift: false
+          method: 'Home Address',
+          business: 'Business Address',
+          home: 'Home Address',
+          gift: false,
+          sendGift: 'Send As a Gift',
+          dontSendGift: 'Do Not Send As A Gift'
         },
         product: {
           id: 1001,
@@ -161,7 +195,7 @@
             "organic goodness for your cat.",
           price: 2000,
           image: "assets/images/product-fullsize.png",
-          availableInventory: 5
+          availableInventory: 10
         },
         cart: []
       },

@@ -3,7 +3,7 @@ header h1{
 }
 
 body {
-  max-width: 1440px;
+  max-width: 1440px!important;; 
 }
 .cart {
 padding: 20px 50px;
@@ -32,6 +32,47 @@ margin-top:50px;
 .container {
   margin: 0 auto;
 }
+
+.inventory-message {
+  margin-left: 20px;
+  font-weight: bold;
+  font-size: 120%;
+}
+
+
+.product {
+  margin-top: 30px;
+  margin-left: 20px;
+  max-height:300px;
+  max-width:100%;
+}
+.figure {
+
+}
+
+.rating-active:before {
+   content: "\2605";
+   position: absolute;
+}
+.rating {
+  display: inline;
+  margin-left: 10px;
+  margin-top: 10px;
+  float:right;
+}
+.rating > span {
+  display: inline-block;
+  position: relative;
+  width: 1.1em;
+}
+
+@media (min-width: 1200px) {
+    .container{
+        max-width: 970px;
+    }
+}
+
+/*Мои производные стили*/
 
 .flex {
   display: flex;
@@ -72,4 +113,8 @@ margin-top:50px;
   align-items: center;
   margin-bottom: 25px;
   padding: 015px;
+}
+
+.header__top-navbar {
+  background-color: pink;
 }
