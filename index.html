@@ -63,7 +63,9 @@
                   v-else>Buy Now! 
                 </span>
                 <div class="rating">
-                  <span v-for="n in 5">☆</span>
+                  <span  v-bind:class="{'rating-active': checkRating(n)}"     
+                    v-for="n in 5" >☆	★ 		
+                  </span>
                 </div>
               </div>
 
@@ -195,7 +197,8 @@
             "organic goodness for your cat.",
           price: 2000,
           image: "assets/images/product-fullsize.png",
-          availableInventory: 10
+          availableInventory: 10,
+          rating: 3
         },
         cart: []
       },
@@ -260,6 +263,9 @@
       },
       //Добавление в корзину по кнопке
       methods: {
+        checkRating (n) {
+          return this.rating - n >= 0;
+        },
         submitForm() {
           alert('Submitted');
         },
