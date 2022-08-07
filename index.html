@@ -3,7 +3,8 @@
 
 <head>
   <title>Vue.js Pet Depot</title>
-  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.0"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2.7.0"></script> -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.0/dist/vue.js"></script>
   <link rel="stylesheet" type="text/css" href="assets/css/app.css" />
   <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
     integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous"> -->
@@ -11,7 +12,8 @@
     crossorigin="anonymous"> -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
     integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.2/axios.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.2/axios.js"></script>  
+  <meta charset="UTF-8">
 </head>
 
 <body>
@@ -44,8 +46,7 @@
                 <p class="price">
                   {{product.price | formatPrice}}
                 </p>
-                <button class=" btn btn-primary btn-lg" v-on:click="addToCart(product)" v-if="canAddToCart(product)">Add
-                  to cart</button>
+                <button class=" btn btn-primary btn-lg" v-on:click="addToCart(product)" v-if="canAddToCart(product)">Add to cart</button>
                 <button disabled="true" class=" btn btn-primary btn-lg" v-else>Add to cart</button>
                 <span class="inventory-message" v-if="product.availableInventory - cartCount(product.id) === 0">All Out!
                 </span>
@@ -223,12 +224,15 @@
           alert('Submitted');
         },
         canAddToCart(aProduct) {
+          //return this.product.availableInventory > this.cartItemCount;
           return aProduct.availableInventory > this.cartCount(aProduct.id);
         },
         cartCount(id) {
           let count = 0;
-          for (var i; i < this.cart.length; i++) {
-            if (this.cart[i] === id) count++
+          for (var i = 0; i < this.cart.length; i++) {
+            if (this.cart[i] === id) {
+              count++;
+            }
           }
           return count;
         }
@@ -237,12 +241,13 @@
       computed: {
         cartItemCount: function () {
           return this.cart.length || '';
-        },
+        },        
         sortedProducts() {
           if (this.products.length > 0) {
             let productsArray = this.products.slice(0);
             console.log(productsArray);
             console.log(this.products);
+            //Функция сравнения на основе заголовков
             function compare(a, b) {
               if (a.title.toLowerCase() < b.title.toLowerCase())
                 return -1;
